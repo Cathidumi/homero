@@ -3,12 +3,11 @@ import os
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
-import userToAITranslator
+import interpretador
 import json
 from datetime import datetime
 
 load_dotenv()
-
 client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
 def singleSelectionQuestion(userInput):
@@ -259,9 +258,11 @@ def imageItem(userInput):
     return response.text
 
 def generateItemContainer(userInput):
-    promptList = json.loads(userToAITranslator.translation(userInput))
+    load_dotenv()
+    client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
+
+    promptList = json.loads(interpretador.translation(userInput))
     itemContainer = {"itemContainer": []}
-    #promptList = json.loads('[{"typeQuestion":"TextQuestion","question":"Enter your name","options":null},{"typeQuestion":"IntegerQuestion","question":"Enter your age","options":null}]')
     element = ''
 
     for prompt in promptList:
@@ -303,67 +304,6 @@ def generateItemContainer(userInput):
         itemContainer["itemContainer"].append(json.loads(element))#append element to the list inside itemContainer Field
     
     return itemContainer #return dict object containing all generated elements
-
-def generateJSON(userInput=str, acID='TML', name='formulario'):
-    """Generates the full JSON form structure based on user input description,
-    including itemContainer and navigationList fields."""
-    form = {
-        "extents": "StudioObject",
-        "objectType": "Survey",
-        "oid": "dXNlclVVSUQ6W3VuZGVmaW5lZF1zdXJ2ZXlVVUlEOltkMzllZTg5MC05MDhkLTExZWYtOWZmYS1jOTM3YmMwNTQ1ODddcmVwb3NpdG9yeVVVSUQ6WyBOb3QgZG9uZSB5ZXQgXQ==",
-        "identity": {
-            "extents": "StudioObject",
-            "objectType": "SurveyIdentity",
-            "name": name,
-            "acronym": acID,
-            "recommendedTo": "",
-            "description": "",
-            "keywords": []
-        },
-        "metainfo": {
-            "extents": "StudioObject",
-            "objectType": "SurveyMetaInfo",
-            "creationDatetime": "2024-10-22T15:53:48.697Z",
-            "otusStudioVersion": ""
-        },
-        "dataSources": [],
-        "itemContainer": [],
-        "navigationList": [],
-        "staticVariableList": [],
-        "surveyItemGroupList": []
-    }
-
-    #print("Generating items...")
-
-    itemCont = generateItemContainer(userInput) #generates item container field
-
-    form['itemContainer'] = itemCont['itemContainer'] #adds generated field to forms dictionary
-
-    numOfItens = len(form['itemContainer'])
-
-    #print('Generating navigation...')
-
-    navigationList = generate_navigation_structure(numOfItens)
-
-    form['navigationList'] = navigationList['navigationList']
-
-    #print('Adjusting indexes...')
-
-    acronym = form['identity']['acronym']
-    numOfItens = len(form['itemContainer'])
-    alphaArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
-    for i in range(0, numOfItens):
-        form['itemContainer'][i]['templateID'] = f'{acronym}{i+1}'
-        form['itemContainer'][i]['customID'] = f'{acronym}{i+1}'
-
-        if form['itemContainer'][i]['objectType'] == 'CheckboxQuestion':
-            currentIndex = form['itemContainer'][i]['templateID']
-            for j in range(0, len(form['itemContainer'][i]['options'])):
-                form['itemContainer'][i]['options'][j]['optionID'] = f'{acronym}{i+1}{alphaArray[j]}'
-                form['itemContainer'][i]['options'][j]['customOptionID'] = f'{acronym}{i+1}{alphaArray[j]}'
-        
-    return form #retorna dicionario que deve ser convertido para json na exportação
 
 def generate_navigation_structure(num_elements=int, acID='TML'):
     # Define the list for storing the navigation elements
@@ -426,14 +366,7 @@ def generate_navigation_structure(num_elements=int, acID='TML'):
 
     return {"navigationList": navigation_list}
 
-def getTime():
-    currentTime = str(datetime.now())
-    currentTime = currentTime.replace(' ', 'T')
-    currentTime = currentTime.replace(':', '_')
-    currentTime = currentTime[:19]
-    return currentTime
-
-if __name__ == "__main__":
+""" if __name__ == "__main__":
 
     userForm = str(input('Gere um instrumento de pesquisa com os seguintes itens:\n'))
     generatedForm = generateJSON(
@@ -445,4 +378,4 @@ if __name__ == "__main__":
     mydirectory = '/home/caua/Documents/llm-tests/samples/gemini' #directory where samples are saved
     with open(f'{mydirectory}/sample_{getTime()}.json', 'w') as outfile:
         json.dump(generatedForm, outfile)
-    
+     """
