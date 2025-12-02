@@ -365,17 +365,3 @@ def generate_navigation_structure(num_elements=int, acID='TML'):
         end_node["inNavigations"] = [None, {"origin": f"{acID}{num_elements}", "index": 1 + num_elements + 1}]
 
     return {"navigationList": navigation_list}
-
-""" if __name__ == "__main__":
-
-    userForm = str(input('Gere um instrumento de pesquisa com os seguintes itens:\n'))
-    generatedForm = generateJSON(
-        userInput=userForm,
-        acID='TML',
-        name='formularioTeste')
-    print(generatedForm)
-
-    mydirectory = '/home/caua/Documents/llm-tests/samples/gemini' #directory where samples are saved
-    with open(f'{mydirectory}/sample_{getTime()}.json', 'w') as outfile:
-        json.dump(generatedForm, outfile)
-     """
