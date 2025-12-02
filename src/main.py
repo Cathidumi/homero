@@ -33,4 +33,4 @@ async def create_survey(survey: Survey):
     
 if __name__ == "__main__":
     hostIP = os.getenv('HOST_IP')
-    uvicorn.run(app, host="143.54.85.142", port=8080)
+    uvicorn.run(app, host=hostIP, port=8080)
