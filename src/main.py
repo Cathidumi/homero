@@ -3,9 +3,11 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
 #custom imports
+import os
 import montador
 #import env variables
 from dotenv import load_dotenv
+
 load_dotenv()#loads env variables
 
 class Survey(BaseModel):
@@ -30,4 +32,5 @@ async def create_survey(survey: Survey):
     return {"message": generatedJSON}
     
 if __name__ == "__main__":
-    uvicorn.run(app, host="143.54.85.142", port=27017)
+    hostIP = os.getenv('HOST_IP')
+    uvicorn.run(app, host="143.54.85.142", port=8080)
