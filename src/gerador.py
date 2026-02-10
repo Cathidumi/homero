@@ -7,10 +7,10 @@ import interpretador
 import json
 from datetime import datetime
 
-load_dotenv()
-client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
+#load_dotenv()
+#client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
-def singleSelectionQuestion(userInput):
+def singleSelectionQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -29,7 +29,7 @@ def singleSelectionQuestion(userInput):
     )
     return response.text
 
-def checkboxQuestion(userInput):
+def checkboxQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -48,7 +48,7 @@ def checkboxQuestion(userInput):
     )
     return response.text
 
-def calendarQuestion(userInput):
+def calendarQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -67,7 +67,7 @@ def calendarQuestion(userInput):
     )
     return response.text
 
-def integerQuestion(userInput):
+def integerQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -86,7 +86,7 @@ def integerQuestion(userInput):
     )
     return response.text
 
-def decimalQuestion(userInput):
+def decimalQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -105,7 +105,7 @@ def decimalQuestion(userInput):
     )
     return response.text
 
-def textQuestion(userInput):
+def textQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -124,7 +124,7 @@ def textQuestion(userInput):
     )
     return response.text
 
-def emailQuestion(userInput):
+def emailQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -143,7 +143,7 @@ def emailQuestion(userInput):
     )
     return response.text
 
-def timeQuestion(userInput):
+def timeQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -162,7 +162,7 @@ def timeQuestion(userInput):
     )
     return response.text
 
-def phoneQuestion(userInput):
+def phoneQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -181,7 +181,7 @@ def phoneQuestion(userInput):
     )
     return response.text
 
-def textItem(userInput):
+def textItem(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -200,7 +200,7 @@ def textItem(userInput):
     )
     return response.text
 
-def autocompleteQuestion(userInput):
+def autocompleteQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -219,7 +219,7 @@ def autocompleteQuestion(userInput):
     )
     return response.text
 
-def fileUploadQuestion(userInput):
+def fileUploadQuestion(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -238,7 +238,7 @@ def fileUploadQuestion(userInput):
     )
     return response.text
 
-def imageItem(userInput):
+def imageItem(userInput, client):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
@@ -270,31 +270,31 @@ def generateItemContainer(userInput):
         element = ''
         match prompt["typeQuestion"]:
             case "SingleSelectionQuestion":
-                element = singleSelectionQuestion(json.dumps(prompt))
+                element = singleSelectionQuestion(json.dumps(prompt), client)
             case "CheckboxQuestion":
-                element = checkboxQuestion(json.dumps(prompt))
+                element = checkboxQuestion(json.dumps(prompt), client)
             case "CalendarQuestion":
-                element = calendarQuestion(json.dumps(prompt))
+                element = calendarQuestion(json.dumps(prompt), client)
             case "IntegerQuestion":
-                element = integerQuestion(json.dumps(prompt))
+                element = integerQuestion(json.dumps(prompt), client)
             case "DecimalQuestion":
-                element = decimalQuestion(json.dumps(prompt))
+                element = decimalQuestion(json.dumps(prompt), client)
             case "TextQuestion":
-                element = textQuestion(json.dumps(prompt))
+                element = textQuestion(json.dumps(prompt), client)
             case "EmailQuestion":
-                element = emailQuestion(json.dumps(prompt))
+                element = emailQuestion(json.dumps(prompt), client)
             case "TimeQuestion":
-                element = timeQuestion(json.dumps(prompt))
+                element = timeQuestion(json.dumps(prompt), client)
             case "PhoneQuestion":
-                element = phoneQuestion(json.dumps(prompt))
+                element = phoneQuestion(json.dumps(prompt), client)
             case "TextItem":
-                element = textItem(json.dumps(prompt))
+                element = textItem(json.dumps(prompt), client)
             case "AutocompleteQuestion":
-                element = autocompleteQuestion(json.dumps(prompt))
+                element = autocompleteQuestion(json.dumps(prompt), client)
             case "FileUploadQuestion":
-                element = fileUploadQuestion(json.dumps(prompt))
+                element = fileUploadQuestion(json.dumps(prompt), client)
             case "ImageItem":
-                element = imageItem(json.dumps(prompt))
+                element = imageItem(json.dumps(prompt), client)
             case "GridIntegerQuestion":
                 pass
             case "GridTextQuestion":
