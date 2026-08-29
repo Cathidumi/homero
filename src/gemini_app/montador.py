@@ -1,7 +1,6 @@
 import gerador
 import json
 from datetime import datetime
-import os
 
 def generateJSON(userInput=str, acID='TML', name='formulario'):
     """Generates the full JSON form structure based on user input description,
@@ -34,15 +33,7 @@ def generateJSON(userInput=str, acID='TML', name='formulario'):
 
     #print("Generating items...")
 
-    try:
-        itemCont = gerador.generateItemContainer(userInput) #generates item container field
-    except Exception as e:
-        print(f"Error generating item container: {e}\nTrying again...\n")
-        try:
-            itemCont = gerador.generateItemContainer(userInput)
-        except Exception as e:
-            print(f"Error generating item container on second attempt: {e}\n Aborting.\n")
-            return e
+    itemCont = gerador.generateItemContainer(userInput) #generates item container field
 
     form['itemContainer'] = itemCont['itemContainer'] #adds generated field to forms dictionary
 
@@ -89,14 +80,6 @@ if __name__ == "__main__":
         name='formularioTeste')
     print(generatedForm)
 
-    mydirectory = os.path.dirname(os.path.abspath(__file__))
-    mydirectory = mydirectory.replace('src', 'samples')
-    if not os.path.exists(mydirectory):
-        os.makedirs(mydirectory)
-
-    if os.name == 'nt': #windows
-        with open(f'{mydirectory}\\sample_{getTime()}.json', 'w') as outfile:
-            json.dump(generatedForm, outfile)
-    else: #linux or others
-        with open(f'{mydirectory}/sample_{getTime()}.json', 'w') as outfile:
-            json.dump(generatedForm, outfile)  
+    mydirectory = '/home/caua/Documents/homero/samples/' #directory where samples are saved
+    with open(f'{mydirectory}/sample_{getTime()}.json', 'w') as outfile:
+        json.dump(generatedForm, outfile)

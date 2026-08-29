@@ -6,7 +6,7 @@ from typing import Optional
 from google.genai import types
 
 
-#load_dotenv()
+load_dotenv()
 
 class Translator(BaseModel):
   typeQuestion: str
@@ -14,12 +14,7 @@ class Translator(BaseModel):
   options: Optional[list[str]]
 
 def translation(userInput):
-  load_dotenv()
-  try:
-    client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
-  except Exception as e:
-    print(f"Error initializing Gemini client: {e}")
-    return None
+  client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
   response = client.models.generate_content(
       model='gemini-2.0-flash',
       contents=f"**userInput:**{userInput}",

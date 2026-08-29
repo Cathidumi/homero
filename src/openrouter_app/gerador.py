@@ -1,21 +1,23 @@
 
 import os
-from google import genai
-from google.genai import types
 from dotenv import load_dotenv
 import interpretador
 import json
 from datetime import datetime
 
-#load_dotenv()
-#client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
+from openai import OpenAI
 
-def singleSelectionQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+
+load_dotenv()
+client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.getenv('OPENROUTER_API_KEY'))
+
+def singleSelectionQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content": """- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -24,17 +26,23 @@ def singleSelectionQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+      ],
+        response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def checkboxQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def checkboxQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -43,17 +51,23 @@ def checkboxQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def calendarQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def calendarQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -62,17 +76,23 @@ def calendarQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def integerQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def integerQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -81,17 +101,23 @@ def integerQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def decimalQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def decimalQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -100,17 +126,23 @@ def decimalQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def textQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def textQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -119,17 +151,23 @@ def textQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def emailQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def emailQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -138,17 +176,23 @@ def emailQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def timeQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def timeQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -157,17 +201,23 @@ def timeQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def phoneQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def phoneQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -176,17 +226,23 @@ def phoneQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def textItem(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def textItem(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -195,17 +251,23 @@ def textItem(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def autocompleteQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def autocompleteQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -214,17 +276,23 @@ def autocompleteQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def fileUploadQuestion(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def fileUploadQuestion(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -233,17 +301,23 @@ def fileUploadQuestion(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def imageItem(userInput, client):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        config=types.GenerateContentConfig(
-            response_mime_type='application/json',
-            system_instruction="""- You are a helpful AI assistant capable of generating JSONs based on user input
+def imageItem(userInput, modelo):
+    itensCompletion = client.chat.completions.create(
+    model=modelo,
+    messages=[
+        {
+            "role": "system",
+            "content":"""- You are a helpful AI assistant capable of generating JSONs based on user input
         - These JSONs are responsible for creating forms in an external appication.
         - Your task is to generate JSONs objects that are based in the following JSON as specified by user input:
 
@@ -252,58 +326,135 @@ def imageItem(userInput, client):
         - Fill the correct properties inside the JSON structure.
         - Do it step by step as specified by the system structure.
         - Return it as a raw JSON, without spaces."""
-        ),
-        contents=f"**user input**: Generate a json with {userInput}"
+        },
+        {
+            "role": "user",
+            "content": f"**user input**: Generate a json with {userInput}"
+        }
+    ],
+    response_format={"type": "json_object"}
     )
-    return response.text
+    return itensCompletion.choices[0].message.content
 
-def generateItemContainer(userInput):
+def generateItemContainer(userInput, modelo):
     load_dotenv()
-    client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
+    API_KEY = os.getenv('OPENROUTER_API_KEY')
+    client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=API_KEY)
 
-    promptList = json.loads(interpretador.translation(userInput))
+    promptList = interpretador.translation(userInput, modelInterpreter=modelo)
+    if 'error' in promptList:
+        print('erro na interpretação')
+        generationLog = {"interpretation": str(promptList), "itemContainer": None, "error": f"Error during interpretation"} #create a dict to log the interpretation, the generated item container and the error message
+        return generationLog #return dict object containing all generated elements and the error message
+
     itemContainer = {"itemContainer": []}
     element = ''
-
+    print('Gerando item container...')
     for prompt in promptList:
-        print(prompt["typeQuestion"])
+        #print(prompt["typeQuestion"])
         element = ''
         match prompt["typeQuestion"]:
             case "SingleSelectionQuestion":
-                element = singleSelectionQuestion(json.dumps(prompt), client)
+                element = singleSelectionQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = singleSelectionQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "CheckboxQuestion":
-                element = checkboxQuestion(json.dumps(prompt), client)
+                element = checkboxQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = checkboxQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "CalendarQuestion":
-                element = calendarQuestion(json.dumps(prompt), client)
+                element = calendarQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = calendarQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "IntegerQuestion":
-                element = integerQuestion(json.dumps(prompt), client)
+                element = integerQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = integerQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "DecimalQuestion":
-                element = decimalQuestion(json.dumps(prompt), client)
+                element = decimalQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = decimalQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "TextQuestion":
-                element = textQuestion(json.dumps(prompt), client)
+                element = textQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = textQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "EmailQuestion":
-                element = emailQuestion(json.dumps(prompt), client)
+                element = emailQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = emailQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "TimeQuestion":
-                element = timeQuestion(json.dumps(prompt), client)
+                element = timeQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = timeQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "PhoneQuestion":
-                element = phoneQuestion(json.dumps(prompt), client)
+                element = phoneQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = phoneQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "TextItem":
-                element = textItem(json.dumps(prompt), client)
+                element = textItem(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = textItem(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "AutocompleteQuestion":
-                element = autocompleteQuestion(json.dumps(prompt), client)
+                element = autocompleteQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = autocompleteQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "FileUploadQuestion":
-                element = fileUploadQuestion(json.dumps(prompt), client)
+                element = fileUploadQuestion(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = fileUploadQuestion(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "ImageItem":
-                element = imageItem(json.dumps(prompt), client)
+                element = imageItem(json.dumps(prompt), modelo=modelo)
+                try:
+                    element_json = json.loads(element) #try to parse the element as JSON
+                except json.JSONDecodeError:
+                    element = imageItem(json.dumps(prompt), modelo=modelo) #if it fails, try to generate the element again
             case "GridIntegerQuestion":
                 pass
             case "GridTextQuestion":
                 pass
             case _:
                 pass
-        itemContainer["itemContainer"].append(json.loads(element))#append element to the list inside itemContainer Field
-    
-    return itemContainer #return dict object containing all generated elements
+        try:
+            itemContainer["itemContainer"].append(json.loads(element)) #append element to the list inside itemContainer Field
+        except json.JSONDecodeError:
+            print('Erro na geração de item')
+            itemContainer["itemContainer"].append(element) #if the element is not a valid JSON, append it as a string to the list inside itemContainer Field
+            generationLog = {"interpretation": promptList, "itemContainer": itemContainer["itemContainer"], "error": f"Error decoding JSON for element"} #create a dict to log the interpretation, the generated item container and the error message
+            return generationLog #return dict object containing all generated elements and the error message
+        except Exception as e:
+            print('Erro inesperado no item container')
+            itemContainer["itemContainer"].append(element) #if any other error occurs, append the element as a string to the list inside itemContainer Field
+            generationLog = {"interpretation": promptList, "itemContainer": itemContainer["itemContainer"], "error": f"Unexpected error for element, error message: {str(e)}"} #create a dict to log the interpretation, the generated item container and the error message
+            return generationLog #return dict object containing all generated elements and the error message
+
+    generationLog = {"interpretation": promptList,
+                     "itemContainer": itemContainer["itemContainer"]} #create a dict to log the interpretation and the generated item container
+    print('Item container gerado com sucesso')
+    return generationLog #return dict object containing all generated elements
 
 def generate_navigation_structure(num_elements=int, acID='TML'):
     # Define the list for storing the navigation elements
@@ -365,3 +516,4 @@ def generate_navigation_structure(num_elements=int, acID='TML'):
         end_node["inNavigations"] = [None, {"origin": f"{acID}{num_elements}", "index": 1 + num_elements + 1}]
 
     return {"navigationList": navigation_list}
+
